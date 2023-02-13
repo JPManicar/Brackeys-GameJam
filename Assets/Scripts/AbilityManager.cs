@@ -50,6 +50,9 @@ public class AbilityManager : MonoBehaviour
 
     //others
     public SpriteRenderer sr;
+    public PlayerMovement player_movement;
+    public GameObject player;
+    public Rigidbody2D r;
 
     private void Awake()
     {
@@ -59,14 +62,17 @@ public class AbilityManager : MonoBehaviour
     void Start()
     {
         //get compoenents
-
+        player = GameObject.FindGameObjectWithTag("player");
 
 
         //define all abilities
-        Ability fireTiger = new Ability(40f, 5f, fireTigerAction);
-        Ability InvChameleon = new Ability(40f, 8f, InvChameleonAction);
-        current_ability_1 = fireTiger;
+        Ability fireTiger = new Ability(40f, 15f, fireTigerAction);
+        Ability InvChameleon = new Ability(40f, 20f, InvChameleonAction);
+        Ability slam = new Ability(40f, 16f, slamAction);
+
+        current_ability_1 = slam;
         current_ability_2 = InvChameleon;
+        Debug.Log("Current Abilities: " + current_ability_1 + ", " + current_ability_2);
     }
 
 
@@ -122,10 +128,20 @@ public class AbilityManager : MonoBehaviour
         StartCoroutine(stealth());
     }
 
+    void slamAction()
+    {
+        
+    }
+
     IEnumerator stealth()
     {
-        sr.color = new Color(255, 255, 255, 100);
-        yield return new WaitForSeconds(4f);
-        sr.color = new Color(255, 255, 255, 255);
+        Color initialColor;
+        initialColor = sr.color;
+        sr.color = Color.gray;
+        player_movement.maxSpeed = 11;
+        yield return new WaitForSeconds(5f);
+        sr.color = initialColor;
+        player_movement.maxSpeed = 9;
+        
     }
 }

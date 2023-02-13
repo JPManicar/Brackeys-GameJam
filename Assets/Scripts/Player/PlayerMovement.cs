@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     // ===== Movement Settings =====
     [Header("Horizontal Movement")]
 
-    [SerializeField] float maxSpeed;
+    [SerializeField] public float maxSpeed;
     [SerializeField] float airStrafeMaxSpeed;
     [Tooltip("Time to max speed")]
     [SerializeField] float maxSpeedTime;
