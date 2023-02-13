@@ -34,11 +34,20 @@
                 },
                 {
                     "name": "Dash",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "bc51d11d-4881-4211-a1d9-36acfd152a4f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "41184ef9-d9d8-429c-a41e-11494e349acb",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold(duration=1)",
                     "initialStateCheck": false
                 },
                 {
@@ -351,6 +360,17 @@
                     "processors": "",
                     "groups": "Joystick",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "14d29c4d-3fba-4688-8b79-cfb42ce19757",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

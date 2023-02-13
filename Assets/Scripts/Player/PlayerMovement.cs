@@ -1,29 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEngine.UI.ScrollRect;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Serializable]
+    class MovementType
+    {
+        [SerializeField] public float maxSpeed;
+        [Tooltip("Speed when moving in the air")]
+        [SerializeField] public float airStrafeMaxSpeed;
+        [Tooltip("Time to max speed")]
+        [SerializeField] public float maxSpeedTime;
+        [Tooltip("Time to from max speed to stop")]
+        [SerializeField] public float stopTime;
+        [Tooltip("Time to from max speed to max speed in the opposite direction")]
+        [SerializeField] public float turnTime;
+        [SerializeField]
+        [ReadOnly]
+        public float moveAcceleration;
+        [SerializeField]
+        [ReadOnly]
+        public float stopAcceleration;
+        [SerializeField]
+        [ReadOnly]
+        public float turnAcceleration;
+    }
+
     // ===== Movement Settings =====
     [Header("Horizontal Movement")]
-
-    [SerializeField] float maxSpeed;
-    [SerializeField] float airStrafeMaxSpeed;
-    [Tooltip("Time to max speed")]
-    [SerializeField] float maxSpeedTime;
-    [Tooltip("Time to from max speed to stop")]
-    [SerializeField] float stopTime;
-    [Tooltip("Time to from max speed to max speed in the opposite direction")]
-    [SerializeField] float turnTime;
-    [SerializeField]
-    [ReadOnly]
-    float moveAcceleration;
-    [SerializeField]
-    [ReadOnly]
-    float stopAcceleration;
-    [SerializeField]
-    [ReadOnly]
-    float turnAcceleration;
+    [SerializeField] MovementType walking;
+    [SerializeField] MovementType sprintMovement;
+    [SerializeField] MovementType dashMovement;
+    [SerializeField] float dashDuration;
+    [SerializeField] float dashCooldown;
 
     [Header("Gravity")]
 
@@ -73,6 +86,8 @@ public class PlayerMovement : MonoBehaviour
     // Variables to track the state of the player's movement and input
     [Header("Tracking Variables")]
 
+    MovementType currMovementType;
+
     [SerializeField]
     [ReadOnly]
     Vector2 velocity;
@@ -86,6 +101,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     float lastJumpTime;
+    [SerializeField]
+    [ReadOnly]
+    float lastDashedTime;
 
     // If the player has released the jump button after jumping
     [SerializeField]
@@ -95,25 +113,49 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-
     }
 
     private void Start()
     {
         velocity = Vector2.zero;
+
+        lastJumpPressed = float.MinValue;
+        lastGroundedTime = float.MinValue;
+        lastJumpTime = float.MinValue;
+        lastDashedTime = float.MinValue;
+
         controls = PlayerControlManager.instance;
+        controls.OnDash += OnDash;
     }
+
     private void FixedUpdate()
     {
+        //float realtime = Time.realtimeSinceStartup;
+        float realtime = Time.timeSinceLevelLoad;
+
         Vector2 inputDir = controls.MoveDir;
+
+        if (realtime - lastDashedTime < dashDuration) // If still dashing, no need check if player is pressing
+            currMovementType = dashMovement;
+        else if (controls.IsSprinting)
+            currMovementType = sprintMovement;
+        else
+            currMovementType = walking;
+
+        if (currMovementType == dashMovement)
+            print("Dashing");
+        else if (currMovementType == sprintMovement)
+            print("Sprinting");
+        else
+            print("Walking");
 
         // ===== Horizontal movement =====
 
         // Slow down the player if not pressing any buttons
         if (inputDir.x == 0f)
         {
-            if (Mathf.Abs(velocity.x) > Mathf.Abs(stopAcceleration * Time.deltaTime))
-                velocity.x = velocity.x + stopAcceleration * Time.deltaTime * (velocity.x > 0f ? 1f : -1f);
+            if (Mathf.Abs(velocity.x) > Mathf.Abs(currMovementType.stopAcceleration * Time.deltaTime))
+                velocity.x = velocity.x + currMovementType.stopAcceleration * Time.deltaTime * (velocity.x > 0f ? 1f : -1f);
             else
                 velocity.x = 0f;
         }
@@ -121,21 +163,18 @@ public class PlayerMovement : MonoBehaviour
         {
             // If moving in the same direction
             if (inputDir.x * velocity.x >= 0)
-                velocity.x += moveAcceleration * inputDir.x * Time.deltaTime;
+                velocity.x += currMovementType.moveAcceleration * inputDir.x * Time.deltaTime;
             // Moving in opposite direction / turning
             else
-                velocity.x -= turnAcceleration * (inputDir.x) * Time.deltaTime;
+                velocity.x -= currMovementType.turnAcceleration * (inputDir.x) * Time.deltaTime;
         }
 
         if (groundChecker.IsTouchingTile)
-            velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
+            velocity.x = Mathf.Clamp(velocity.x, -currMovementType.maxSpeed, currMovementType.maxSpeed);
         else
-            velocity.x = Mathf.Clamp(velocity.x, -airStrafeMaxSpeed, airStrafeMaxSpeed);
+            velocity.x = Mathf.Clamp(velocity.x, -currMovementType.airStrafeMaxSpeed, currMovementType.airStrafeMaxSpeed);
 
         // ===== Vertical movement =====
-
-        //float realtime = Time.realtimeSinceStartup;
-        float realtime = Time.timeSinceLevelLoad;
 
         if (groundChecker.IsTouchingTile && velocity.y <= 0f)
         {
@@ -159,7 +198,7 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = jumpVelocity;
             lastJumpPressed = float.MinValue; // Prevent jump buffer from triggering again
             lastGroundedTime = float.MinValue;
-            lastJumpTime = Time.time;
+            lastJumpTime = realtime;
             ifReleaseJumpAfterJumping = false;
         }
         if (!controls.IsJumping)
@@ -174,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
                 velocity.y = 0f;
             // Increased gravity if player is moving up and not inputting jump
             // Also check if it jumped to the minimum amount of seconds
-            else if (!controls.IsJumping && (Time.time - lastJumpTime) > minJumpTime)
+            else if (!controls.IsJumping && (realtime - lastJumpTime) > minJumpTime)
                 velocity.y += gravity * Time.deltaTime * gravityMultiplierWhenRelease;
             else
                 velocity.y += gravity * Time.deltaTime;
@@ -190,17 +229,34 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + velocity * Time.deltaTime);
     }
 
+    // ========== Events ==========
+    private void OnDash(InputAction.CallbackContext context)
+    {
+        // If player press dash and cooldown is over
+        if (Time.timeSinceLevelLoad - lastDashedTime < dashCooldown)
+            return;
+
+        currMovementType = dashMovement;
+        lastDashedTime = Time.timeSinceLevelLoad;
+    }
+
     private void OnValidate()
     {
         // Limit variables
 
         float minValue = 0.01f;
 
-        maxSpeed = Mathf.Max(minValue, maxSpeed);
-        airStrafeMaxSpeed = Mathf.Max(minValue, airStrafeMaxSpeed);
-        maxSpeedTime = Mathf.Max(minValue, maxSpeedTime);
-        stopTime = Mathf.Max(minValue, stopTime);
-        turnTime = Mathf.Max(minValue, turnTime);
+        MovementType[] movementTypes = { walking, sprintMovement, dashMovement };
+        foreach (MovementType type in movementTypes)
+        {
+            type.maxSpeed = Mathf.Max(minValue, type.maxSpeed);
+            type.airStrafeMaxSpeed = Mathf.Max(minValue, type.airStrafeMaxSpeed);
+            type.maxSpeedTime = Mathf.Max(minValue, type.maxSpeedTime);
+            type.stopTime = Mathf.Max(minValue, type.stopTime);
+            type.turnTime = Mathf.Max(minValue, type.turnTime);
+        }
+        dashDuration = Mathf.Max(-minValue, dashDuration);
+        dashCooldown = Mathf.Max(-minValue, dashCooldown);
         maxFallVelocity = Mathf.Min(-minValue, maxFallVelocity);
         maxJumpHeight = Mathf.Max(minValue, maxJumpHeight);
         minJumpHeight = Mathf.Max(minValue, minJumpHeight);
@@ -213,9 +269,12 @@ public class PlayerMovement : MonoBehaviour
         // Calculate physics before hand, prevent runtime calculation
         // Movement
 
-        moveAcceleration = maxSpeed / maxSpeedTime;
-        stopAcceleration = -maxSpeed / stopTime;
-        turnAcceleration = 2f * -maxSpeed / turnTime;
+        foreach (MovementType type in movementTypes)
+        {
+            type.moveAcceleration = type.maxSpeed / type.maxSpeedTime;
+            type.stopAcceleration = -type.maxSpeed / type.stopTime;
+            type.turnAcceleration = 2f * -type.maxSpeed / type.turnTime;
+        }
 
         // Gravity
 

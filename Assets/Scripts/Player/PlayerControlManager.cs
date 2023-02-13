@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class PlayerControlManager : MonoBehaviour
     private InputAction aim;
     private InputAction move;
     private InputAction jump;
+    private InputAction sprint;
     private InputAction dash;
     private InputAction interact;
     private InputAction inventory;
@@ -20,11 +22,14 @@ public class PlayerControlManager : MonoBehaviour
     [field: SerializeField] public Vector2 Aim { get; private set; }
     [field: SerializeField] public Vector2 MoveDir { get; private set; }
     [field: SerializeField] public bool IsJumping { get; private set; }
-    [field: SerializeField] public bool IsDashing { get; private set; }
+    [field: SerializeField] public bool IsSprinting { get; private set; }
     [field: SerializeField] public bool IsInteracting { get; private set; }
     [field: SerializeField] public bool IsOpeningInventory { get; private set; }
     [field: SerializeField] public bool IsUsingPrimaryAttack { get; private set; }
     [field: SerializeField] public bool IsUsingSecondaryAttack { get; private set; }
+
+    // Events
+    public event Action<InputAction.CallbackContext> OnDash;
 
     // Singleton
     public static PlayerControlManager instance { get; private set; }
@@ -46,6 +51,7 @@ public class PlayerControlManager : MonoBehaviour
         move = playerControls.Player.Move;
         jump = playerControls.Player.Jump;
         dash = playerControls.Player.Dash;
+        sprint = playerControls.Player.Sprint;
         interact = playerControls.Player.Interact;
         inventory = playerControls.Player.Inventory; 
         primaryAttack= playerControls.Player.PrimaryAttack;
@@ -58,10 +64,13 @@ public class PlayerControlManager : MonoBehaviour
         move.Enable();
         jump.Enable();
         dash.Enable();
+        sprint.Enable();
         interact.Enable();
         inventory.Enable();
         primaryAttack.Enable();
         secondaryAttack.Enable();
+
+        dash.performed += (InputAction.CallbackContext context) => OnDash(context);
     }
 
     private void OnDisable()
@@ -70,6 +79,7 @@ public class PlayerControlManager : MonoBehaviour
         move.Disable();
         jump.Disable();
         dash.Disable();
+        sprint.Disable();
         interact.Disable();
         inventory.Disable();
         primaryAttack.Disable();
@@ -81,7 +91,7 @@ public class PlayerControlManager : MonoBehaviour
         Aim = aim.ReadValue<Vector2>();
         MoveDir = move.ReadValue<Vector2>();
         IsJumping = jump.IsPressed(); // Check holding
-        IsDashing = dash.WasPressedThisFrame();
+        IsSprinting = sprint.phase == InputActionPhase.Performed;
         IsInteracting = interact.WasPressedThisFrame();
         IsOpeningInventory = inventory.WasPressedThisFrame();
         IsUsingPrimaryAttack = primaryAttack.WasPressedThisFrame();
