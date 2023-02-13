@@ -1,12 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-
+using UnityEngine.Events;
 
 public class AbilityManager : MonoBehaviour
 {
+    public class Ability
+    {
+        public float damage;
+        public float cooldown;
+        public static event Action OnUse;
+        //public static event onuse OnUse;
+        public Ability(float dmg, float cd, Action onuse)
+        {
+            damage = dmg;
+            cooldown = cd;
+            OnUse = onuse;
+
+        }
+        public void use()
+        {
+            OnUse?.Invoke();
+        }
+    }
+
+
     public static AbilityManager Instance;
 
     //ability images
@@ -15,14 +36,20 @@ public class AbilityManager : MonoBehaviour
     public Image a_bgr_image_1;
     public Image a_bgr_image_2;
 
+
+
     //cooldowns
-    public float a_cd_1 = 3f;
-    public float a_cd_2 = 3f;
     public float a_nextUseTime_1 = 0f;
     public float a_nextUseTime_2 = 0f;
     public float target_time;
 
 
+    //current abilities
+    private Ability current_ability_1;
+    private Ability current_ability_2;
+
+    //others
+    public SpriteRenderer sr;
 
     private void Awake()
     {
@@ -31,17 +58,26 @@ public class AbilityManager : MonoBehaviour
 
     void Start()
     {
-        
+        //get compoenents
+
+
+
+        //define all abilities
+        Ability fireTiger = new Ability(40f, 5f, fireTigerAction);
+        Ability InvChameleon = new Ability(40f, 8f, InvChameleonAction);
+        current_ability_1 = fireTiger;
+        current_ability_2 = InvChameleon;
+
     }
 
 
     void Update()
     {
         //image fill
-        float fillAmount1 = 1 - (a_nextUseTime_1 - Time.time) / a_cd_1;
+        float fillAmount1 = 1 - (a_nextUseTime_1 - Time.time) / current_ability_1.cooldown;
         a_image_1.fillAmount = fillAmount1;
 
-        float fillAmount2 = 1 - (a_nextUseTime_2 - Time.time) / a_cd_2;
+        float fillAmount2 = 1 - (a_nextUseTime_2 - Time.time) / current_ability_1.cooldown;
         a_image_2.fillAmount = fillAmount2;
 
 
@@ -49,15 +85,22 @@ public class AbilityManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && Time.time >= a_nextUseTime_1)
         {
             StartCoroutine(test(a_bgr_image_1));
-            a_nextUseTime_1 = Time.time + a_cd_1;
+            current_ability_1.use();
+            a_nextUseTime_1 = Time.time + current_ability_1.cooldown;
+            
         }
         if (Input.GetKeyDown(KeyCode.E) && Time.time >= a_nextUseTime_2)
         {
             StartCoroutine(test(a_bgr_image_2));
-            a_nextUseTime_2 = Time.time + a_cd_2;
+            current_ability_2.use();
+            a_nextUseTime_2 = Time.time + current_ability_1.cooldown;
         }
 
     }
+
+
+
+
 
     IEnumerator test(Image img)
     {
@@ -67,4 +110,23 @@ public class AbilityManager : MonoBehaviour
     }
     
 
+
+
+    void fireTigerAction()
+    {
+        //for when movement code is done: make attack range and attack damage higher whilst this is active
+        Debug.Log("Firetiger!");
+    }
+
+    void InvChameleonAction()
+    {
+        StartCoroutine(Action());
+    }
+
+    IEnumerator Action()
+    {
+        sr.color = new Color(255, 255, 255, 100);
+        yield return new WaitForSeconds(6f);
+        sr.color = new Color(255, 255, 255, 255);
+    }
 }

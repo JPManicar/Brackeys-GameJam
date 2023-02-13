@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!212 &65608161 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1212326587709789884, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+  m_PrefabInstance: {fileID: 2084703230}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &89382127
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,11 +441,10 @@ MonoBehaviour:
   a_image_2: {fileID: 888085987}
   a_bgr_image_1: {fileID: 1996418987}
   a_bgr_image_2: {fileID: 380153475}
-  a_cd_1: 10
-  a_cd_2: 6
   a_nextUseTime_1: 0
   a_nextUseTime_2: 0
   target_time: 0
+  sr: {fileID: 65608161}
 --- !u!1 &541313334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1987,6 +1991,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1212326587709789760, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1212326587709789760, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1212326587709789882, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
       propertyPath: m_Name
       value: Player
