@@ -12,7 +12,7 @@ public class AbilityManager : MonoBehaviour
     {
         public float damage;
         public float cooldown;
-        public static event Action OnUse;
+        public event Action OnUse;
         //public static event onuse OnUse;
         public Ability(float dmg, float cd, Action onuse)
         {
@@ -67,7 +67,6 @@ public class AbilityManager : MonoBehaviour
         Ability InvChameleon = new Ability(40f, 8f, InvChameleonAction);
         current_ability_1 = fireTiger;
         current_ability_2 = InvChameleon;
-
     }
 
 
@@ -84,14 +83,14 @@ public class AbilityManager : MonoBehaviour
         //check for input
         if (Input.GetKeyDown(KeyCode.Q) && Time.time >= a_nextUseTime_1)
         {
-            StartCoroutine(test(a_bgr_image_1));
+            StartCoroutine(Haptic(a_bgr_image_1));
             current_ability_1.use();
             a_nextUseTime_1 = Time.time + current_ability_1.cooldown;
-            
+
         }
         if (Input.GetKeyDown(KeyCode.E) && Time.time >= a_nextUseTime_2)
         {
-            StartCoroutine(test(a_bgr_image_2));
+            StartCoroutine(Haptic(a_bgr_image_2));
             current_ability_2.use();
             a_nextUseTime_2 = Time.time + current_ability_1.cooldown;
         }
@@ -102,16 +101,16 @@ public class AbilityManager : MonoBehaviour
 
 
 
-    IEnumerator test(Image img)
+    IEnumerator Haptic(Image img)
     {
         img.rectTransform.sizeDelta = new Vector2(60, 70);
         yield return new WaitForSeconds(0.1f);
         img.rectTransform.sizeDelta = new Vector2(77, 80);
     }
-    
 
 
 
+    //why isnt any of this shit working bruh it worked before i closed the project what the actual fuck
     void fireTigerAction()
     {
         //for when movement code is done: make attack range and attack damage higher whilst this is active
@@ -120,13 +119,13 @@ public class AbilityManager : MonoBehaviour
 
     void InvChameleonAction()
     {
-        StartCoroutine(Action());
+        StartCoroutine(stealth());
     }
 
-    IEnumerator Action()
+    IEnumerator stealth()
     {
         sr.color = new Color(255, 255, 255, 100);
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(4f);
         sr.color = new Color(255, 255, 255, 255);
     }
 }
