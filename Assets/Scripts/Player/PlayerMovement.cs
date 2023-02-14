@@ -132,6 +132,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] TileChecker groundChecker;
     [SerializeField] TileChecker ceilingChecker;
 
+    // ===== Game Jam Specific, remove all game jam =====
+    public float overrideMaxSpeed;
+    public bool ifOverrideMaxSpeed;
+
     // ===== Private variables =====
 
     private PlayerControlManager controls;
@@ -283,7 +287,9 @@ public class PlayerMovement : MonoBehaviour
                 velocity.x -= currMovementType.turnAcceleration * (xInput) * Time.deltaTime;
         }
 
-        if (groundChecker.IsTouchingTile)
+        if (ifOverrideMaxSpeed)
+            velocity.x = Mathf.Clamp(velocity.x, -overrideMaxSpeed, overrideMaxSpeed);
+        else if (groundChecker.IsTouchingTile)
             velocity.x = Mathf.Clamp(velocity.x, -currMovementType.maxSpeed, currMovementType.maxSpeed);
         else
             velocity.x = Mathf.Clamp(velocity.x, -currMovementType.airStrafeMaxSpeed, currMovementType.airStrafeMaxSpeed);

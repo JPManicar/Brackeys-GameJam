@@ -135,10 +135,12 @@ public class AbilityManager : MonoBehaviour
         Color initialColor;
         initialColor = sr.color;
         sr.color = Color.gray;
-        player_movement.maxSpeed = 11;
+        player_movement.overrideMaxSpeed = 11;
+        player_movement.ifOverrideMaxSpeed = true;
         yield return new WaitForSeconds(5f);
         sr.color = initialColor;
-        player_movement.maxSpeed = 9;
+        player_movement.ifOverrideMaxSpeed = false;
+        //player_movement.overrideMaxSpeed = 9;
         
     }
 }
