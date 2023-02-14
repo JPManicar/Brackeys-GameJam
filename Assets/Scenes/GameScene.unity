@@ -6505,7 +6505,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1905754994}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.97900105, y: -0.44299975, z: -10}
+  m_LocalPosition: {x: 0.9790009, y: -0.44299975, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6643,6 +6643,22 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashDuration
+      value: 0.075
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: sprintMovement.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.maxSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
       propertyPath: normalMovement.maxSpeed
       value: 7.5
       objectReference: {fileID: 0}
@@ -6655,8 +6671,40 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: sprintMovement.maxSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: movementTypeTransitionTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
       propertyPath: normalMovement.maxSpeedTime
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: walking.transitionEndTiming
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.moveAcceleration
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.stopAcceleration
+      value: -333.3333
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.turnAcceleration
+      value: -1333.3333
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: walking.transitionStartTiming
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.airStrafeMaxSpeed
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
       propertyPath: normalMovement.moveAcceleration
@@ -6671,8 +6719,36 @@ PrefabInstance:
       value: -150
       objectReference: {fileID: 0}
     - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: sprintMovement.moveAcceleration
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: sprintMovement.stopAcceleration
+      value: -49.999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: sprintMovement.turnAcceleration
+      value: -199.99998
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.transitionEndTiming
+      value: -3.402823e+30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
       propertyPath: normalMovement.airStrafeMaxSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: dashMovement.transitionStartTiming
+      value: -3.402823e+30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: sprintMovement.transitionEndTiming
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887577854193396367, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: sprintMovement.transitionStartTiming
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
@@ -6827,7 +6903,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3738163283473816949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.97900105, y: -0.44299975, z: -10}
+  m_LocalPosition: {x: 0.9790009, y: -0.44299975, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
