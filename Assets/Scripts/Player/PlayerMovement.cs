@@ -156,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     [ReadOnly]
-    Vector2 velocity;
+    public Vector2 velocity;
 
     // If the last facing direction is left, for stationary dashing
     // TODO: Change when animation is applied
