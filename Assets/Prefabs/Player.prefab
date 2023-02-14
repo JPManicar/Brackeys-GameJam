@@ -148,14 +148,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39091f19aa19a3743aa8893297d5ea54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 7.5
-  airStrafeMaxSpeed: 5
-  maxSpeedTime: 0.1
-  stopTime: 0.2
-  turnTime: 0.1
-  moveAcceleration: 75
-  stopAcceleration: -37.5
-  turnAcceleration: -150
+  walking:
+    type: 0
+    maxSpeed: 7.5
+    airStrafeMaxSpeed: 5
+    maxSpeedTime: 0.1
+    stopTime: 0.2
+    turnTime: 0.1
+    transitionStartTiming: 0.1
+    transitionEndTiming: 0.1
+    moveAcceleration: 75
+    stopAcceleration: -37.5
+    turnAcceleration: -150
+  sprintMovement:
+    type: 1
+    maxSpeed: 15
+    airStrafeMaxSpeed: 10
+    maxSpeedTime: 0.2
+    stopTime: 0.3
+    turnTime: 0.15
+    transitionStartTiming: 0.2
+    transitionEndTiming: 0.2
+    moveAcceleration: 75
+    stopAcceleration: -49.999996
+    turnAcceleration: -199.99998
+  dashMovement:
+    type: 2
+    maxSpeed: 100
+    airStrafeMaxSpeed: 100
+    maxSpeedTime: 0.2
+    stopTime: 0.3
+    turnTime: 0.15
+    transitionStartTiming: -3.402823e+30
+    transitionEndTiming: -3.402823e+30
+    moveAcceleration: 500
+    stopAcceleration: -333.3333
+    turnAcceleration: -1333.3333
+  dashDuration: 0.125
+  dashCooldown: 0.3
   maxFallVelocity: -100
   gravity: -31.25
   fallingGravity: -55.55555
@@ -170,10 +200,36 @@ MonoBehaviour:
   jumpBuffer: 0.05
   groundChecker: {fileID: 897963686750516990}
   ceilingChecker: {fileID: 518011218683482382}
+  targetMovementType:
+    type: 0
+    maxSpeed: 0
+    airStrafeMaxSpeed: 0
+    maxSpeedTime: 0
+    stopTime: 0
+    turnTime: 0
+    transitionStartTiming: 0
+    transitionEndTiming: 0
+    moveAcceleration: 0
+    stopAcceleration: 0
+    turnAcceleration: 0
+  currMovementType:
+    type: 0
+    maxSpeed: 0
+    airStrafeMaxSpeed: 0
+    maxSpeedTime: 0
+    stopTime: 0
+    turnTime: 0
+    transitionStartTiming: 0
+    transitionEndTiming: 0
+    moveAcceleration: 0
+    stopAcceleration: 0
+    turnAcceleration: 0
   velocity: {x: 0, y: 0}
+  isLastFacingDirLeft: 0
   lastJumpPressed: 0
   lastGroundedTime: 0
   lastJumpTime: 0
+  lastDashedTime: 0
   ifReleaseJumpAfterJumping: 0
 --- !u!1 &1212326587796118603
 GameObject:
