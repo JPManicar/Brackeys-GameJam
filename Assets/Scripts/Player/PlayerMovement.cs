@@ -229,7 +229,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (ifTransition)
         {
-            print($"Transition: {currMovementType.type} to {targetMovementType.type}");
             if (movementTransitionCoroutine != null)
                 StopCoroutine(movementTransitionCoroutine);
 
@@ -238,7 +237,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            print($"Transition: {currMovementType.type} to {targetMovementType.type} | Immediate\nIfTransition: {ifTransition}");
             this.targetMovementType = targetMovementType;
             MovementType.Clone(currMovementType, targetMovementType);
         }
@@ -249,13 +247,11 @@ public class PlayerMovement : MonoBehaviour
         MovementType prevMovementType = new MovementType(currMovementType);
         float t = 0f;
         float transitionTime = prevMovementType.transitionEndTiming + targetMovementType.transitionStartTiming;
-        print("Time; " + transitionTime);
 
         while (t < transitionTime)
         {
             t += Time.deltaTime;
             currMovementType.Lerp(prevMovementType, targetMovementType, t / transitionTime);
-            print("Lerping to " + targetMovementType.type + "   " +  t + "   " + currMovementType.maxSpeed);
             yield return null;
         }
 
