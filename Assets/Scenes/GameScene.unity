@@ -1139,7 +1139,7 @@ GameObject:
   - component: {fileID: 1052411877}
   - component: {fileID: 1052411876}
   - component: {fileID: 1052411875}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2921,6 +2921,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 518011218683482382, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: LayerMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 897963686750516990, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
+      propertyPath: LayerMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1212326587709789760, guid: 0c106050f4af94d44badb0aa71cc6726, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 1
