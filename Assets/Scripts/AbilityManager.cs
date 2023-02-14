@@ -36,13 +36,10 @@ public class AbilityManager : MonoBehaviour
     public Image a_bgr_image_1;
     public Image a_bgr_image_2;
 
-
-
     //cooldowns
     public float a_nextUseTime_1 = 0f;
     public float a_nextUseTime_2 = 0f;
     public float target_time;
-
 
     //current abilities
     private Ability current_ability_1;
