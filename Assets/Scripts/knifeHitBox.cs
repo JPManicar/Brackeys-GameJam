@@ -20,7 +20,7 @@ public class knifeHitBox : MonoBehaviour
     {
         if(collision.CompareTag("Enemy"))
         {
-            collision.gameObject.GetComponent<Enemy_Health>().health -= 35;
+            Debug.Log("Hit an enemy");
         }
     }
 }

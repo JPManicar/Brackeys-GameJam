@@ -5,14 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class parole_enemy_ai : MonoBehaviour
+public class Enemy_AI : MonoBehaviour
 {
     public Transform pointA;
     public Transform pointB;
     public float speed = 2f;
     public float smoothTime = 0.3f;
     public bool followPlayer = false;
-    public static parole_enemy_ai Instance;
+    public static Enemy_AI Instance;
     public Collider2D followCollider;
     private float startTime;
     private float journeyLength;
@@ -38,7 +38,7 @@ public class parole_enemy_ai : MonoBehaviour
 
     void Update()
     {
-        if (followPlayer && player != null && player_global_vars.Instance.stealthed == false)
+        if (followPlayer && player != null)
         {
             // Follow player smoothly using SmoothDamp
             targetPosition = new Vector2(player.position.x, transform.position.y);
