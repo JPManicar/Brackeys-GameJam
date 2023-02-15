@@ -7,20 +7,13 @@ using UnityEngine.Events;
 
 public class parole_enemy_ai : MonoBehaviour
 {
-    public Transform pointA;
-    public Transform pointB;
-    public float speed = 2f;
-    public float smoothTime = 0.3f;
+    public float speed = 0.1f;
     public bool followPlayer = false;
     public static parole_enemy_ai Instance;
-    public Collider2D followCollider;
-    private float startTime;
-    private float journeyLength;
-    private bool movingToEnd = true;
-    private Transform player;
-    private Vector2 velocity = Vector2.zero;
-    Vector2 targetPosition;
-    public bool movingToNearestPoint;
+    public Transform player;
+    public Animator anim;
+    public float distance;
+    
 
     private void Awake()
     {
@@ -32,91 +25,58 @@ public class parole_enemy_ai : MonoBehaviour
 
     void Start()
     {
-        startTime = Time.time;
-        journeyLength = Vector2.Distance(pointA.position, pointB.position);
+        player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
     }
 
     void Update()
     {
-        if (followPlayer && player != null && player_global_vars.Instance.stealthed == false)
+        Vector2 myPos, targetPos;
+        myPos = transform.position;
+        targetPos.x = player.position.x;
+        targetPos.y = 0;
+       
+        distance = Vector2.Distance(transform.position, player.position);
+        if(!followPlayer)
         {
-            // Follow player smoothly using SmoothDamp
-            targetPosition = new Vector2(player.position.x, transform.position.y);
-            transform.position = Vector2.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime, speed);
-            speed = 5f;
+            anim.SetFloat("isWalking", 0);
+            anim.SetBool("isAttacking", false);
         }
-        else
+        if(followPlayer)
         {
-            speed = 3f;
-            if (movingToNearestPoint)
+            if(player.transform.localScale.x > 0)
             {
-                speed = 7f;
-                // Move to nearest point
-                targetPosition = FindNearestPoint().position;
-                transform.position = Vector2.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime, speed);
-                if (Vector2.Distance(transform.position, targetPosition) < 0.1f)
-                {
-                    movingToNearestPoint = false;
-                    startTime = Time.time;
-                    journeyLength = Vector2.Distance(pointA.position, pointB.position);
-                }
+                transform.localScale = new Vector2(3, transform.localScale.y);
             }
-            else
+            if (player.transform.localScale.x < 0)
             {
-                // Move between points A and B
-                float distCovered = (Time.time - startTime) * speed;
-                float fracJourney = distCovered / journeyLength;
-                if (movingToEnd)
-                {
-                    transform.position = Vector2.Lerp(pointA.position, pointB.position, fracJourney);
-                    if (fracJourney >= 1f)
-                    {
-                        movingToEnd = false;
-                        startTime = Time.time;
-                    }
-                }
-                else
-                {
-                    transform.position = Vector2.Lerp(pointB.position, pointA.position, fracJourney);
-                    if (fracJourney >= 1f)
-                    {
-                        movingToEnd = true;
-                        startTime = Time.time;
-                    }
-                }
+                transform.localScale = new Vector2(-3, transform.localScale.y);
+            }
+            if (distance >= 3)
+            {
+                anim.SetBool("isAttacking", false);
+                anim.SetFloat("isWalking", 1);
+                transform.position = Vector2.Lerp(myPos, targetPos, speed);
+            }
+            if(distance <= 3)
+            {
+                anim.SetFloat("isWalking", 0);
+                anim.SetBool("isAttacking", true);
             }
         }
     }
 
 
-
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other == followCollider && other.CompareTag("player"))
+        if(collision.CompareTag("player"))
         {
             followPlayer = true;
-            player = other.transform;
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other == followCollider && other.CompareTag("player"))
-        {
-            followPlayer = false;
-            player = null;
-            movingToNearestPoint = true;
-            startTime = Time.time;
-            journeyLength = Vector2.Distance(transform.position, FindNearestPoint().position);
-        }
-    }
 
-    Transform FindNearestPoint()
-    {
-        float distanceToA = Vector2.Distance(transform.position, pointA.position);
-        float distanceToB = Vector2.Distance(transform.position, pointB.position);
-        return distanceToA < distanceToB ? pointA : pointB;
-    }
+
+
 
 }
 
