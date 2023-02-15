@@ -23,7 +23,10 @@ public class Enemy_Health : MonoBehaviour
     {
         if(health <= 0)
         {
-            Destroy(gameObject);
+            if(gameObject.tag == "Enemy") gameObject.GetComponentInParent<parole_enemy_ai>().SelfDestruct();
+            if(gameObject.tag == "rat") gameObject.GetComponentInParent<rat_ai>().SelfDestruct();
+
+
         }
     }
 }

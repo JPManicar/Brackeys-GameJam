@@ -57,6 +57,11 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damageTaken)
     {
         playerHealth-= damageTaken;
+        foreach(var x in player_global_vars.Instance.srs)
+        {
+            x.color = player_global_vars.Instance.hit_color;
+        }
+        Invoke("takeDamageEffect", 0.2f);
         setHealth(playerHealth);
 
         CreateHearts();
@@ -100,6 +105,15 @@ public class PlayerHealth : MonoBehaviour
         HeartsDisplay heartComponent = newHeart.GetComponent<HeartsDisplay>();
         heartComponent.SetHearthStatus(HeartsDisplay.HeartStatus.empty);
         hearts.Add(heartComponent);
+    }
+
+    void takeDamageEffect()
+    {
+        foreach(var x in player_global_vars.Instance.srs)
+        {
+            x.color = Color.white;
+        }
+        
     }
 
 }

@@ -14,6 +14,7 @@ public class parole_enemy_ai : MonoBehaviour
     public Animator anim;
     public float distance;
     public bool isAttacking;
+    public SpriteRenderer[] srs;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class parole_enemy_ai : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+        srs = GetComponentsInChildren<SpriteRenderer>();
         
     }
 
@@ -82,6 +84,11 @@ public class parole_enemy_ai : MonoBehaviour
         }
     }
 
+
+    public void SelfDestruct()
+    {
+        Destroy(gameObject);
+    }
 
 
 
