@@ -8,10 +8,16 @@ public class PlayerHealth : MonoBehaviour
     
     public int playerHealth;
     public int maxHealth;
+    public static PlayerHealth Instance;
     public GameObject heartPrefab;
     public List<HeartsDisplay> hearts = new List<HeartsDisplay>();
-    
-    
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+
     void Start()
     {
         CreateHearts();

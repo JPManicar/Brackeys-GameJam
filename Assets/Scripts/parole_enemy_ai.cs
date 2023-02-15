@@ -68,6 +68,7 @@ public class parole_enemy_ai : MonoBehaviour
             {
                 anim.SetFloat("isWalking", 0);
                 anim.SetBool("isAttacking", true);
+
             }
         }
     }
