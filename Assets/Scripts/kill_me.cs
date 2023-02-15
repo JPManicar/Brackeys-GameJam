@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class knifeHitBox : MonoBehaviour
+public class kill_me : MonoBehaviour
 {
     // Start is called before the first frame update
+    public static kill_me Instance;
+
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+    }
     void Start()
     {
         
@@ -16,11 +23,8 @@ public class knifeHitBox : MonoBehaviour
         
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnBecameInvisible()
     {
-        if(collision.CompareTag("Enemy"))
-        {
-            collision.gameObject.GetComponent<Enemy_Health>().health -= 35;
-        }
+        Destroy(gameObject);
     }
 }
