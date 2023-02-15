@@ -7,13 +7,13 @@ using UnityEngine.Events;
 
 public class parole_enemy_ai : MonoBehaviour
 {
-    public float speed = 0.1f;
+    public float speed;
     public bool followPlayer = false;
     public static parole_enemy_ai Instance;
     public Transform player;
     public Animator anim;
     public float distance;
-    
+    public bool isAttacking;
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class parole_enemy_ai : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("player").GetComponent<Transform>();
+        
     }
 
     void Update()
@@ -36,28 +37,34 @@ public class parole_enemy_ai : MonoBehaviour
         targetPos.y = 0;
        
         distance = Vector2.Distance(transform.position, player.position);
-        if(!followPlayer)
+
+        Vector3 direction = player.position - transform.position;
+
+        direction.Normalize();
+
+        if (!followPlayer)
         {
             anim.SetFloat("isWalking", 0);
             anim.SetBool("isAttacking", false);
         }
+
         if(followPlayer)
         {
-            if(player.transform.localScale.x > 0)
+            if((transform.position.x > player.position.x))
             {
-                transform.localScale = new Vector2(3, transform.localScale.y);
+                transform.localScale = new Vector2(-1, transform.localScale.y);
             }
-            if (player.transform.localScale.x < 0)
-            {
-                transform.localScale = new Vector2(-3, transform.localScale.y);
+            else
+            { 
+                transform.localScale = new Vector2(1, transform.localScale.y);
             }
-            if (distance >= 3)
+            if (distance > 3)
             {
                 anim.SetBool("isAttacking", false);
                 anim.SetFloat("isWalking", 1);
-                transform.position = Vector2.Lerp(myPos, targetPos, speed);
+                transform.position += direction * speed * Time.deltaTime;
             }
-            if(distance <= 3)
+            if(distance < 3)
             {
                 anim.SetFloat("isWalking", 0);
                 anim.SetBool("isAttacking", true);
